@@ -1,5 +1,6 @@
 package co.com.choucair.certification.utest.stepdefinitions;
 
+import co.com.choucair.certification.utest.interactions.FillRegisterForm;
 import co.com.choucair.certification.utest.model.User;
 import co.com.choucair.certification.utest.questions.AnswerConfirmRegister;
 import co.com.choucair.certification.utest.tasks.*;
@@ -13,8 +14,8 @@ import net.serenitybdd.screenplay.actors.OnlineCast;
 
 import java.util.List;
 
-import static net.serenitybdd.screenplay.actors.OnStage.theActorCalled;
-import static net.serenitybdd.screenplay.actors.OnStage.theActorInTheSpotlight;
+import static net.serenitybdd.screenplay.actors.OnStage.*;
+
 
 public class RegisterUserStepDefinition {
 
@@ -28,19 +29,15 @@ public class RegisterUserStepDefinition {
         theActorCalled("Miguel").wasAbleTo(EnterHomeUTest.openPage());
     }
 
-
     @When("^a user fills out the registration form correctly$")
     public void a_user_fills_out_the_registration_form_correctly(List<User> user) {
         theActorInTheSpotlight().attemptsTo(
-                EnterPersonalInformation.enterPersonalInfo(user),
-                EnterAddressInformation.enterAddressInfo(user),
-                EnterDevicesInformation.enterDeviceInfo(user),
-                EnterCompleteInformation.enterCompleteInfo(user)
+                FillRegisterForm.withUser(user)
         );
     }
 
     @Then("^the registration is successful$")
     public void the_registration_is_successful(List<User> user) {
-        OnStage.theActorInTheSpotlight().should(GivenWhenThen.seeThat(AnswerConfirmRegister.toThe(user)));
+        theActorInTheSpotlight().should(GivenWhenThen.seeThat(AnswerConfirmRegister.toThe(user)));
     }
 }
